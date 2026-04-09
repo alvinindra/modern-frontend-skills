@@ -2,6 +2,14 @@
 
 Claude Code skill for building premium frontend interfaces.
 
+## Install
+
+Works via CLI for all major AI coding agents (Cursor, Antigravity, Claude Code, Codex, Copilot, etc.).
+
+```bash
+npx skills add https://github.com/alvinindra/skills
+```
+
 ## Structure
 
 ```
