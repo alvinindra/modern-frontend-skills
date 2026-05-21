@@ -1,208 +1,156 @@
 ---
-name: skills
-description: Build ultra-premium, Awwwards-grade interfaces with trained taste, choreographed motion, and Emil Kowalski-level craft. Fuses the cinematic Louis Paquet / TUX Creative / Locomotive aesthetic with high-agency bias-correction rules and a rigorous animation decision framework. Use this skill whenever the user asks for a landing page, hero section, portfolio, agency site, SaaS dashboard, product showcase, marketing page, or any interface that should feel premium, editorial, cinematic, immersive, or "stunning". Also trigger on mentions of Awwwards, SOTD, Locomotive, TUX Creative, smooth scroll, GSAP landing, Bento grid, Emil Kowalski, design engineering, premium UI, high-end frontend, Sonner-style polish, or any request for "world-class", "impressive", or "taste-driven" frontend work. ALWAYS use this instead of the generic frontend-design skill.
+name: modern-frontend
+description: Awwwards-grade premium frontend pack. Picks one of six purpose-built directions (cinematic-scroll, motion-bento, publication, nightside, modernist-grid, considered-modern), then layers the Emil Kowalski craft canon on top. Activates on requests for landing pages, hero sections, portfolios, agency sites, SaaS dashboards, product showcases, feature sections, marketing pages, scrolltelling, narrative pacing, immersive launches, or any UI that should feel premium, editorial, cinematic, dark, moody, refined, taste-driven, or "stunning". Trigger on Awwwards, SOTD, SOTY, Louis Paquet, Locomotive, TUX Creative, Emil Kowalski, Sonner, Vaul, premium UI, conversion-grade SaaS, magnetic button, scroll reveal, parallax, world-class, design engineering. ALWAYS use this instead of the generic frontend-design skill for premium / cinematic / Awwwards-quality work.
 ---
 
-# Premium Frontend Skill — Taste, Motion, and Craft
+# Modern Frontend — Pack Router
 
-Build interfaces at the level of Awwwards Site of the Year winners and the quiet polish of Emil Kowalski's component work (Sonner, Vaul, Family). Every detail compounds — the goal is the aggregate of invisible correctness that makes software feel right.
+The pack contains six directions. Each is built around the same craft floor (the Emil Kowalski animation canon + the slop filter) but answers a different design question. The router's job is to pick the right one fast, then get out of the way.
 
-**FIRST**: Read `references/design-system.md` for the full rule system, animation decision framework, code patterns, and forbidden-pattern checklist before writing any code.
-
----
-
-## 0. Core Philosophy
-
-Two philosophies operate in parallel. Neither is optional.
-
-1. **The Awwwards Cinematic Layer** — Oversized typography, choreographed scroll narratives, dramatic negative space, grain, parallax, editorial boldness. Pages feel art-directed, not assembled.
-2. **The Emil Kowalski Craft Layer** — Every animation has a purpose. Buttons feel pressed. Popovers scale from their trigger. Nothing animates from `scale(0)`. Easing curves are hand-tuned. Invisible details compound.
-
-> "All those unseen details combine to produce something that's just stunning, like a thousand barely audible voices all singing in tune." — Paul Graham
-
-Taste is trained, not innate. Reverse-engineer the best work. Review your animations the next day with fresh eyes. In a world where every app is good enough, taste is the differentiator.
+The pack's identity is not "general taste". It is specifically: **the cinematic confidence of Louis Paquet / Locomotive work + the invisible craft of Emil Kowalski**. Each direction is curated against that axis. Pages built from this pack should feel directed (Louis Paquet) and crafted (Emil Kowalski) at the same time.
 
 ---
 
-## 1. Active Baseline Configuration
+## The six directions
 
-These dials drive all creative decisions. Adapt dynamically if the user explicitly requests otherwise in chat, but never ask the user to edit this file.
-
-- **DESIGN_VARIANCE: 8** (1 = symmetric, 10 = asymmetric chaos)
-- **MOTION_INTENSITY: 6** (1 = static, 10 = cinematic physics)
-- **VISUAL_DENSITY: 4** (1 = art gallery, 10 = cockpit)
-
-Dial definitions and breakpoint overrides live in `references/design-system.md` § Dials.
-
----
-
-## 2. Default Architecture
-
-Unless the user specifies otherwise:
-
-- **Single-file HTML artifacts** — Inline all CSS/JS. Only external deps allowed: Google Fonts, GSAP + ScrollTrigger from cdnjs, Lenis from unpkg.
-- **React / Next.js artifacts** — Server Components by default. Any interactive, motion-heavy, or perpetually animating element MUST be isolated in its own leaf component with `'use client'` at the top. Memoize perpetual motion (React.memo) to prevent parent re-renders.
-- **Dependency verification** — Before importing `framer-motion`, `lucide-react`, `@phosphor-icons/react`, `@radix-ui/react-icons`, `zustand`, etc., you MUST check `package.json`. If missing, output the install command first. Never assume.
-- **Tailwind version lock** — Check `package.json`. Don't use v4 syntax in v3. For v4, use `@tailwindcss/postcss` or the Vite plugin, not the `tailwindcss` plugin.
-- **Icons** — Exactly `@phosphor-icons/react` or `@radix-ui/react-icons`. Standardize `strokeWidth` (1.5 or 2.0).
-- **Anti-emoji policy [CRITICAL]** — NEVER use emojis in code, markup, content, or alt text. Use Phosphor/Radix icons or clean SVG primitives.
-
----
-
-## 3. The Animation Decision Framework
-
-Before writing ANY animation, walk the tree. Full detail in `references/design-system.md` § Animation Decision Framework.
-
-**Step 1 — Should this animate at all?**
-
-| Frequency | Decision |
+| Direction | Question it answers |
 |---|---|
-| 100+ times/day (keyboard shortcuts, command palette) | No animation. Ever. |
-| Tens of times/day (hovers, list nav) | Remove or drastically reduce |
-| Occasional (modals, drawers, toasts) | Standard animation |
-| Rare (onboarding, celebrations, marketing) | Can add delight |
+| [`cinematic-scroll`](cinematic-scroll/skill.md) | "How do I make the product the story of the page?" |
+| [`motion-bento`](motion-bento/skill.md) | "How do I show a working product surface in a marketing context?" |
+| [`publication`](publication/skill.md) | "How do I make the page read like a designed article?" |
+| [`nightside`](nightside/skill.md) | "How do I make this brand feel after-hours, considered, not flashy?" |
+| [`modernist-grid`](modernist-grid/skill.md) | "How do I let typography and grid do all the work?" |
+| [`considered-modern`](considered-modern/skill.md) | "How do I make this read warm and professional, not cold-startup?" |
 
-Never animate keyboard-initiated actions. Raycast has no open/close animation for a reason.
-
-**Step 2 — What is the purpose?** Spatial consistency, state indication, feedback, preventing jarring changes, explanation. If the answer is "it looks cool" and the user will see it often — don't.
-
-**Step 3 — What easing?** Enter/exit → `ease-out`. On-screen movement → `ease-in-out`. Hover/color → `ease`. Constant motion → `linear`. **Never `ease-in` for UI** — it feels sluggish at the exact moment users are watching most closely. Use custom curves, not browser defaults.
-
-**Step 4 — How fast?** Buttons 100–160ms. Tooltips 125–200ms. Dropdowns 150–250ms. Modals/drawers 200–500ms. **UI animations stay under 300ms.**
+A direction is chosen, not negotiated. The pack does not produce hybrid output unless the user explicitly requests it.
 
 ---
 
-## 4. Design Engineering Directives (Bias Correction)
+## Picking the direction
 
-LLMs have statistical biases toward cliché UI. Proactively override them.
+The router decides in this order:
 
-### Typography
-- **Display**: `text-4xl md:text-6xl tracking-tighter leading-none` as baseline.
-- **BANNED for premium vibes**: `Inter`. Force character with `Geist`, `Outfit`, `Cabinet Grotesk`, `Satoshi`, `Instrument Serif`, `Playfair Display`, `Syne`.
-- **Technical/dashboard UIs**: Serif fonts are strictly BANNED. Use `Geist + Geist Mono` or `Satoshi + JetBrains Mono`.
-- **No oversized H1 screaming**. Control hierarchy with weight and color, not just scale.
-- **Body**: `text-base leading-relaxed max-w-[65ch]` with a muted neutral.
+1. **Explicit naming.** If the user types `cinematic-scroll`, `motion-bento`, `publication`, `nightside`, `modernist-grid`, or `considered-modern`, route there. Also accept close phrasings — see § Aliases below.
+2. **Phrase signals.** If the user uses one of the high-signal phrases listed in § Phrase routing, route to the matched direction.
+3. **Brief inference.** Read the brief — product, audience, mood, density, energy — and pick the strongest fit using § Inference rules.
 
-### Color
-- Max **1 accent color**. Saturation < 80%.
-- **THE LILA BAN**: The "AI purple/blue gradient glow" aesthetic is BANNED. No purple button glows, no neon gradients.
-- **No pure black** (`#000000`). Use Zinc-950, Off-Black, Charcoal.
-- Stick to ONE palette per project. Don't drift between warm and cool grays.
+The router does not ask the user to pick from a menu. It picks, and explains the pick in one sentence at the top of the output ("Going `nightside` — the brand wants late-night confidence over startup polish.").
 
-### Layout
-- **Anti-center bias**: At `DESIGN_VARIANCE > 4`, centered heroes are BANNED. Use split-screen, asymmetric whitespace, or left-aligned content with right-anchored assets.
-- **No 3-equal-card feature rows**. Use 2-column zig-zag, asymmetric bento, or horizontal scroll galleries.
-- **Grid over flex math**. Never `w-[calc(33%-1rem)]`. Use `grid grid-cols-1 md:grid-cols-3 gap-6`.
-- **Viewport stability [CRITICAL]**: NEVER `h-screen` on heroes. Always `min-h-[100dvh]` to prevent iOS Safari jump.
-- **Mobile override**: For `DESIGN_VARIANCE ≥ 4`, all asymmetric layouts must aggressively collapse to `w-full px-4 py-8` single-column below `md:`.
+### Aliases
 
-### Materiality
-- **Dashboard hardening**: At `VISUAL_DENSITY > 7`, generic card containers are BANNED. Group via `border-t`, `divide-y`, or pure negative space. Only card where elevation communicates hierarchy.
-- **Shadows**: When used, tint to background hue. No default neon/outer glows.
-- **Liquid Glass**: When glassmorphism is needed, add a 1px `border-white/10` AND `shadow-[inset_0_1px_0_rgba(255,255,255,0.1)]` to simulate physical edge refraction.
+- `cinematic`, `cinematic product`, `scrolltell`, `product launch`, `immersive` → `cinematic-scroll`
+- `bento`, `premium bento`, `motion engine`, `SaaS feature grid`, `archetype bento` → `motion-bento`
+- `editorial`, `editorial premium`, `magazine`, `publication`, `design journal` → `publication`
+- `dark luxe`, `dark luxury`, `moody premium`, `late night UI`, `after hours` → `nightside`
+- `swiss`, `swiss system`, `swiss design`, `modernist`, `grid system`, `typographic poster` → `modernist-grid`
+- `warm modern`, `humane modern`, `studio site`, `professional services` → `considered-modern`
 
-### Interactive States (mandatory)
-- **Loading** — Skeletal loaders matching layout, not generic spinners.
-- **Empty** — Beautifully composed, guide the user to populate.
-- **Error** — Inline, clear, next to the source.
-- **Tactile** — Every button needs `active:scale-[0.97]` or `active:-translate-y-[1px]`. Nothing is static on press.
+### Phrase routing (no explicit name)
 
----
+- "product launch" / "hardware" / "scroll-driven" / "feels like a film" → `cinematic-scroll`
+- "SaaS landing" / "feature section" / "AI product page" / "bento" → `motion-bento`
+- "magazine" / "image-led" / "publication" / "design studio" → `publication`
+- "dark" + "premium" / "restaurant" / "hospitality" / "exclusive" → `nightside`
+- "rational" / "grid" / "Swiss" / "typographic poster" / "institutional" → `modernist-grid`
+- "professional services" / "agency site" / "warm" / "consultancy" / "studio" → `considered-modern`
 
-## 5. The Emil Craft Layer (Invisible Details)
+### Inference rules (when brief is vague)
 
-These are the rules that separate "it works" from "it feels right."
+- Strong narrative arc + product as protagonist → `cinematic-scroll`
+- Show what the product *does* in miniature surfaces → `motion-bento`
+- Typography-led with curated image sequencing → `publication`
+- Mood-led with deep negative space → `nightside`
+- Grid-led with structural color → `modernist-grid`
+- Studio voice with real photography → `considered-modern`
 
-1. **Never animate from `scale(0)`**. Start from `scale(0.95)` + `opacity: 0`. Nothing in the real world appears from nothing.
-2. **Popovers scale from their trigger**, not center. Use `transform-origin: var(--radix-popover-content-transform-origin)`. (Modals are exempt — they stay centered.)
-3. **Buttons must feel pressed**. `transform: scale(0.97)` on `:active`, `transition: transform 160ms ease-out`.
-4. **Tooltips skip delay on subsequent hovers**. Once one opens, adjacent ones open instantly.
-5. **Use CSS transitions over keyframes for interruptible UI**. Keyframes restart from zero; transitions retarget smoothly — critical for anything triggered rapidly (toasts, list adds).
-6. **Asymmetric enter/exit timing**. Slow where the user is deciding (hold-to-delete: 2s linear). Fast where the system responds (release: 200ms ease-out).
-7. **Use `blur(2px)` to mask imperfect crossfades**. When two states overlap and feel off, subtle blur blends the gap. Keep under 20px.
-8. **Percentage translates**. Use `translateY(100%)` over pixel values. Adapts to content, less error-prone.
-9. **`@starting-style` for entries**. Modern CSS replacement for `useEffect(() => setMounted(true))`.
-10. **Only animate `transform` and `opacity`**. Anything else triggers layout/paint. No exceptions for performance-critical paths.
-11. **Framer Motion hardware-acceleration caveat**: `animate={{ x: 100 }}` is NOT hardware-accelerated. Use `animate={{ transform: "translateX(100px)" }}` for any path that must stay smooth under load.
-12. **Springs for gestures and "alive" elements**. `{ type: "spring", stiffness: 100, damping: 20 }` as baseline. Springs maintain velocity when interrupted; CSS restarts from zero.
-13. **Stagger enters with 30–80ms delays**. Never block interaction while stagger plays.
-14. **Respect `prefers-reduced-motion`** — Fewer and gentler, not zero. Keep opacity and color; remove movement.
-15. **Gate hover animations**: `@media (hover: hover) and (pointer: fine)`. Touch devices trigger hover on tap — prevent false positives.
+If two directions seem to compete, pick the one that better matches the *brand's confidence*: a premium watch brand probably wants `nightside`, not `motion-bento`. A B2B observability tool wants `motion-bento`, not `cinematic-scroll`.
 
 ---
 
-## 6. Cinematic Section Blueprint
+## The pack's two-layer model
 
-A typical premium landing page (adapt to context):
+Every output is the product of two layers, applied in this order:
 
-1. **Hero** — Full viewport (`min-h-[100dvh]`), oversized animated title (split-text char stagger on load), subtitle fade-up, scroll indicator. Asymmetric layout preferred.
-2. **Intro / About** — Split 60/40 or 50/50, animated paragraph reveal (word-by-word or line-by-line).
-3. **Showcase / Features** — Bento grid (asymmetric, not 3 equal cards) OR horizontal scroll hijack gallery.
-4. **Marquee Ticker** — Scroll-velocity-aware infinite strip, large display font, muted color.
-5. **Large Editorial Quote** — Line-by-line reveal, generous whitespace.
-6. **CTA** — Bold closing section, magnetic button (Framer `useMotionValue`, NOT `useState`).
-7. **Footer** — Minimal, elegant, subtle entrance.
+### Layer 1 — Direction
 
----
+The chosen style folder's `skill.md` is the **design brief**. It defines:
 
-## 7. SaaS / Dashboard Mode — The Motion-Engine Bento
+- The dial calibration (variance / motion / density baseline) for this direction.
+- The three signature moves that make this direction recognizable.
+- The materials: typography, color, layout, surface treatment.
+- The motion choreography appropriate for this direction.
+- The wrong-style tells (slop signals specific to this direction).
+- A reference artifact for tone calibration.
 
-When building modern SaaS dashboards or feature sections, use the "Bento 2.0" architecture. Full code in `references/design-system.md` § Motion-Engine Bento.
+### Layer 2 — Craft canon (universal)
 
-- Background `#f9fafb`, cards pure white with `border-slate-200/50`, `rounded-[2.5rem]`, diffusion shadows (`shadow-[0_20px_40px_-15px_rgba(0,0,0,0.05)]`).
-- Labels live **outside and below** cards (gallery style).
-- Every card has a perpetual micro-interaction (pulse, typewriter, float, carousel, intelligent list).
-- Spring physics everywhere: `type: "spring", stiffness: 100, damping: 20`. No linear easing.
-- Perpetual motion MUST be memoized and isolated in its own microscopic Client Component.
+Two files apply to every output regardless of direction. The agent reads them after picking the direction:
 
-**5 Card Archetypes**: Intelligent List (auto-sorting with `layoutId`), Command Input (typewriter cycle), Live Status (breathing indicators + overshoot notification pop), Wide Data Stream (seamless infinite carousel), Contextual UI (staggered highlight + floating toolbar).
+- [`references/animation.md`](references/animation.md) — the Emil Kowalski animation canon. Decision framework (easing-first, usability frame, frequency, purpose, duration), easing curves, the craft checklist (button press, popover trigger-origin, `scale(0.95)` entries, asymmetric timing, gesture velocity), provenance notes on which rules are directly from Emil and which are skill-tuned.
+- [`references/forbidden.md`](references/forbidden.md) — the slop filter. Visual / typography / layout / content / component / React-Framer anti-patterns + the pre-flight checklist that must pass before output.
+
+These are how the pack defines "premium" at the craft level. A `modernist-grid` button still presses on `:active`. A `publication` popover still scales from its trigger. The forbidden patterns apply equally to all six directions.
 
 ---
 
-## 8. AI Tells — Forbidden Patterns (The Slop Filter)
+## Component knowledge — open the files
 
-Strictly avoid these unless the user explicitly requests them. Full list in `references/design-system.md` § Forbidden.
+After picking a direction, the agent consults the shared component-library research:
 
-- **Names**: No "John Doe", "Sarah Chan", "Jack Su", "Acme", "Nexus", "SmartFlow". Invent realistic, specific, contextual names.
-- **Avatars**: No egg SVGs, no Lucide user icons. Use `picsum.photos/seed/{random}/800/600` or styled UI Avatars.
-- **Data**: No `99.99%`, `50%`, `1234567`. Use organic values (`47.2%`, `+1 (312) 847-1928`).
-- **Copy**: No "Elevate", "Seamless", "Unleash", "Next-Gen". Use concrete verbs.
-- **Images**: No Unsplash (broken links). Use `picsum.photos`.
-- **Cursors**: No custom mouse cursors — outdated, hurts a11y and perf.
-- **Text effects**: No text-fill gradients on large headers.
-- **shadcn/ui**: May be used, but NEVER in default state. Customize radii, colors, shadows.
+- [`components/style-recipes.md`](components/style-recipes.md) — Maps each direction to the specific patterns from each library that strengthen it (which GSAP demos, which Framer primitives, which Aceternity recipes, which 21st.dev components). **Open this first.**
+- [`components/gsap-patterns.md`](components/gsap-patterns.md) — GSAP + ScrollTrigger + Lenis recipes for the cinematic directions.
+- [`components/motion-libraries.md`](components/motion-libraries.md) — Framer Motion patterns, React Bits notes, Aceternity UI notes (when carefully applied).
+- [`components/component-libraries.md`](components/component-libraries.md) — 21st.dev primitives, shadcn customization rules, Radix popover origin enforcement.
+
+Use these as research, not as templates. Anything pasted in raw will read as a kit; customize against the chosen direction.
 
 ---
 
-## 9. Performance Guardrails
+## Pack-wide safety rules — applied unconditionally
 
-- **Grain/noise filters** on fixed `pointer-events-none` pseudo-elements ONLY. Never on scrolling containers.
-- **Only animate `transform` and `opacity`**. Never `top`, `left`, `width`, `height`, `padding`, `margin`.
-- **CSS variable inheritance trap**: Updating a CSS var on a parent recalculates styles for all children. For drag/swipe, set `element.style.transform` directly, not a variable.
-- **Z-index restraint**: No arbitrary `z-50` / `z-10`. Systemic only (sticky nav, modals, overlays).
-- **Never mix GSAP/ThreeJS with Framer Motion** in the same component tree. Framer for UI/bento; GSAP/ThreeJS for isolated full-page scrolltelling or canvas — wrapped in strict `useEffect` cleanup.
-- **Never `window.addEventListener('scroll')`** — use ScrollTrigger, IntersectionObserver, or Framer's `useScroll`.
-- **Prefer CSS animations over JS under load** — CSS runs off main thread; Framer `x`/`y` use `requestAnimationFrame` and drop frames when the browser is busy.
+These never depend on direction or brief. They apply on every output.
 
----
-
-## 10. Process
-
-1. **Read** `references/design-system.md` in full — every code pattern, easing curve, and forbidden list.
-2. **Choose** an aesthetic direction from the brief (cinematic dark, cream editorial, midnight blue, warm noir, ice minimal).
-3. **Select** the mode: Cinematic Landing (§6) or Motion-Engine Bento (§7).
-4. **Compose** structure. At `DESIGN_VARIANCE 8`, push asymmetric by default.
-5. **Walk** every animation through the Decision Framework (§3). Cut anything that fails.
-6. **Apply** the Emil Craft Layer (§5) to every interactive element. No button without `:active`. No popover with wrong origin. No crossfade without blur-bridge if needed.
-7. **Polish** with grain overlay, custom accent selection, magnetic CTAs, staggered reveals.
-8. **Filter** against Forbidden Patterns (§8). Cut any slop.
-9. **Verify** mobile collapse, `min-h-[100dvh]`, reduced-motion, hover media query gates.
-10. **Review** the final code against the Pre-Flight Check in `references/design-system.md` § Pre-Flight.
-
-Output single HTML artifacts to `/mnt/user-data/outputs/`. For React/Next.js, respect the host project's stack.
+- **No emojis.** Anywhere — code, markup, content, alt text. Use Phosphor or Radix icons.
+- **Dependency verification.** Before importing `framer-motion`, `lucide-react`, `@phosphor-icons/react`, `@radix-ui/react-icons`, `zustand`, etc., check `package.json`. If missing, output the install command first.
+- **Tailwind version lock.** Check `package.json` for v3 vs v4.
+- **Viewport stability.** Never `h-screen`. Always `min-h-[100dvh]` for any full-viewport surface.
+- **Icon family lock.** Phosphor OR Radix, not both. Stroke weight 1.5 or 2.0.
+- **No `Inter`, `Roboto`, or system sans as identity.**
+- **No pure `#000000`.** Use tuned off-black.
+- **The Lila Ban.** No purple/blue AI-gradient glows.
+- **No `scale(0)` entries.** Always `scale(0.95)` + `opacity: 0`.
+- **No `ease-in` on UI.** Always `ease-out` with custom cubic-bezier.
 
 ---
 
-## Final Reminder
+## The quality floor
 
-Premium interfaces are not a collection of effects — they're a thousand barely-audible voices singing in tune. One wrong easing, one `scale(0)`, one centered hero at `DESIGN_VARIANCE 8`, one `Inter` headline, one "Sarah Chan" testimonial — and the spell breaks. Measure twice, cut once. Review tomorrow with fresh eyes.
+Every output must clear this bar regardless of direction:
+
+- Could be screenshot-cropped from any section and read as deliberate.
+- Would still feel specific with the logo removed. If another brand could swap in with no tension, the work failed.
+- Contains real visual media (photography, renders, illustrations) in the hero or first two sections when imagery would help.
+- Treats "visual media" as actual images, not gradients / particles / shaders.
+- Includes interaction states (loading, empty, error, hover, focus, active) that match the direction's pacing.
+- Passes the pre-flight in `references/forbidden.md` before being declared done.
+
+---
+
+## When the brief is broad
+
+The router picks the strongest plausible direction and commits. It does not hedge.
+
+If the brief is ambiguous between two directions, the pick goes to the one that better preserves the brand's *confidence*. A handcraft brand goes to `cinematic-scroll` or `nightside` before `motion-bento`. A B2B platform goes to `motion-bento` or `modernist-grid` before `publication`.
+
+If the brief is broad in a way that fits no direction well, that is itself the signal: the brief needs sharpening before code. Ask one clarifying question, then commit.
+
+---
+
+## Pack examples — for tone, not for copy
+
+Two reference artifacts live in [`examples/`](examples/):
+
+- [`examples/cinematic-landing.html`](examples/cinematic-landing.html) — Maris & Co., Newport sailmakers since 1947. A `cinematic-scroll` page end-to-end: asymmetric masthead, sticky letter, inventory bento, deep-navy quote, magnetic CTA, colophon footer, three-act pacing.
+- [`examples/bento-saas.tsx`](examples/bento-saas.tsx) — Morse, sound design library workflow for game studios. A `motion-bento` page with all five archetypes wired together.
+
+Read these for *tone calibration*. Do not copy literally. Every page must invent its own world.

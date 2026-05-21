@@ -1,0 +1,1448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Maris &amp; Co. — Sailmakers, Newport since 1947</title>
+  <meta name="description" content="Maris &amp; Co. has cut and stitched sails for the wooden classics of Narragansett Bay for three generations. Every cloth is laid by hand on the same Beech floor we started on.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400&family=Geist:wght@300;400;500&family=Geist+Mono:wght@400&display=swap" rel="stylesheet">
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://unpkg.com/lenis@1.1.18/dist/lenis.min.js"></script>
+
+  <style>
+    /* =========================================================
+       TOKENS — Cream editorial with deep navy + faded crimson
+       ========================================================= */
+    :root {
+      --bg: #efe7d8;
+      --bg-deep: #e7ddc7;
+      --paper: #f6efe2;
+      --ink: #181815;
+      --ink-soft: #4a463e;
+      --rule: #c4b9a3;
+      --hair: rgba(24, 24, 21, 0.16);
+      --navy: #1e2a3a;
+      --crimson: #8e3231;
+      --brass: #93702a;
+
+      --display: 'Fraunces', 'Iowan Old Style', Georgia, serif;
+      --body: 'Geist', 'Helvetica Neue', sans-serif;
+      --mono: 'Geist Mono', 'IBM Plex Mono', monospace;
+
+      --t-press: 160ms;
+      --t-ui: 200ms;
+      --t-reveal: 1.2s;
+
+      --e-out: cubic-bezier(0.23, 1, 0.32, 1);
+      --e-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+      --e-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+
+      --container: min(94vw, 1480px);
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      font-size: 16px;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--body);
+      font-size: 1rem;
+      line-height: 1.55;
+      overflow-x: hidden;
+      min-height: 100dvh;
+    }
+
+    .container {
+      width: var(--container);
+      margin: 0 auto;
+    }
+
+    ::selection {
+      background: var(--crimson);
+      color: var(--paper);
+    }
+
+    /* Grain — fixed, pointer-events-none */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: -50%;
+      width: 200%;
+      height: 200%;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.07'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 200;
+      opacity: 0.45;
+      mix-blend-mode: multiply;
+    }
+
+    /* =========================================================
+       MASTHEAD — newspaper-style fixed rules
+       ========================================================= */
+    .top {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 50;
+      padding: 1.5rem 0 1rem;
+      background: linear-gradient(to bottom, var(--bg) 65%, transparent);
+    }
+
+    .top__inner {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: 2rem;
+    }
+
+    .top__meta {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+    }
+
+    .top__brand {
+      font-family: var(--display);
+      font-style: italic;
+      font-weight: 500;
+      font-size: 1.35rem;
+      letter-spacing: -0.01em;
+      text-align: center;
+    }
+
+    .top__links {
+      display: flex;
+      justify-content: flex-end;
+      gap: 1.75rem;
+      list-style: none;
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+    }
+
+    .top__links a {
+      color: var(--ink);
+      text-decoration: none;
+      transition: color var(--t-ui) var(--e-out);
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+      .top__links a:hover { color: var(--crimson); }
+    }
+
+    @media (max-width: 820px) {
+      .top__inner { grid-template-columns: auto 1fr; }
+      .top__meta { display: none; }
+      .top__brand { text-align: left; }
+    }
+
+    /* =========================================================
+       SCROLL PROGRESS — faint hair line
+       ========================================================= */
+    .progress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 1px;
+      width: 100%;
+      background: var(--crimson);
+      transform-origin: left;
+      transform: scaleX(0);
+      z-index: 60;
+    }
+
+    /* =========================================================
+       ACT 1 — MASTHEAD HERO (Hook, 0–5s)
+       Editorial 12-col with offset oversized number
+       ========================================================= */
+    .masthead {
+      min-height: 100dvh;
+      position: relative;
+      padding: 9rem 0 4rem;
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      grid-template-rows: auto 1fr auto;
+      gap: 1.5rem 1.5rem;
+    }
+
+    .masthead__rule {
+      grid-column: 1 / -1;
+      height: 1px;
+      background: var(--ink);
+      align-self: start;
+    }
+
+    .masthead__no {
+      grid-column: 1 / span 2;
+      font-family: var(--display);
+      font-size: clamp(3rem, 8vw, 9rem);
+      line-height: 0.9;
+      font-style: italic;
+      color: var(--ink);
+      align-self: end;
+      margin-top: 2rem;
+    }
+
+    .masthead__no small {
+      display: block;
+      font-family: var(--mono);
+      font-style: normal;
+      font-size: 0.7rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      margin-top: 1rem;
+    }
+
+    .masthead__title {
+      grid-column: 3 / span 9;
+      font-family: var(--display);
+      font-size: clamp(3rem, 9vw, 11rem);
+      font-weight: 400;
+      line-height: 0.88;
+      letter-spacing: -0.035em;
+      align-self: end;
+    }
+
+    .masthead__title em {
+      font-style: italic;
+      color: var(--crimson);
+      font-weight: 400;
+    }
+
+    .masthead__title .line {
+      display: block;
+      overflow: hidden;
+    }
+
+    .masthead__title .char {
+      display: inline-block;
+      transform: translateY(110%);
+    }
+
+    .masthead__deck {
+      grid-column: 8 / span 4;
+      align-self: end;
+      font-family: var(--display);
+      font-style: italic;
+      font-size: clamp(1.05rem, 1.4vw, 1.5rem);
+      line-height: 1.4;
+      color: var(--ink-soft);
+      max-width: 32ch;
+      padding-bottom: 0.5rem;
+      opacity: 0;
+      transform: translateY(20px);
+    }
+
+    .masthead__data {
+      grid-column: 1 / span 7;
+      padding-top: 2rem;
+      border-top: 1px solid var(--hair);
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem 2rem;
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      opacity: 0;
+      transform: translateY(20px);
+    }
+
+    .masthead__data dt {
+      color: var(--ink);
+      font-weight: 500;
+      margin-bottom: 0.25rem;
+    }
+
+    .masthead__cite {
+      grid-column: 8 / span 5;
+      padding-top: 2rem;
+      border-top: 1px solid var(--hair);
+      font-family: var(--display);
+      font-style: italic;
+      font-size: 0.95rem;
+      line-height: 1.5;
+      color: var(--ink-soft);
+      opacity: 0;
+      transform: translateY(20px);
+    }
+
+    .masthead__cite span {
+      display: block;
+      margin-top: 0.6rem;
+      font-family: var(--mono);
+      font-style: normal;
+      font-size: 0.68rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--ink);
+    }
+
+    @media (max-width: 980px) {
+      .masthead { padding: 7rem 0 3rem; gap: 1rem; }
+      .masthead__no { grid-column: 1 / -1; font-size: 4rem; margin-top: 0; }
+      .masthead__title { grid-column: 1 / -1; font-size: clamp(2.75rem, 12vw, 5rem); }
+      .masthead__deck { grid-column: 1 / -1; }
+      .masthead__data { grid-column: 1 / -1; grid-template-columns: repeat(2, 1fr); }
+      .masthead__cite { grid-column: 1 / -1; }
+    }
+
+    /* =========================================================
+       SECTION — INTRO LETTER (Build, 5–10s)
+       Right-anchored letter, sticky label far left
+       ========================================================= */
+    section {
+      padding: clamp(6rem, 12vh, 12rem) 0;
+      position: relative;
+    }
+
+    .letter {
+      display: grid;
+      grid-template-columns: 2fr 8fr 2fr;
+      gap: 2rem;
+      align-items: start;
+    }
+
+    .letter__index {
+      position: sticky;
+      top: 6rem;
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+    }
+
+    .letter__index strong {
+      display: block;
+      font-family: var(--display);
+      font-style: italic;
+      font-weight: 500;
+      font-size: 1.5rem;
+      color: var(--ink);
+      letter-spacing: -0.01em;
+      margin-bottom: 0.5rem;
+      text-transform: none;
+    }
+
+    .letter__body {
+      font-family: var(--display);
+      font-style: italic;
+      font-size: clamp(1.5rem, 2.6vw, 2.6rem);
+      line-height: 1.3;
+      letter-spacing: -0.015em;
+      max-width: 26ch;
+    }
+
+    .letter__body em {
+      color: var(--crimson);
+      font-style: italic;
+    }
+
+    .letter__body .ww {
+      display: inline-block;
+      overflow: hidden;
+      vertical-align: bottom;
+      margin-right: 0.22em;
+    }
+
+    .letter__body .w {
+      display: inline-block;
+      transform: translateY(110%);
+    }
+
+    .letter__sign {
+      font-family: var(--display);
+      font-style: italic;
+      font-size: 1.15rem;
+      color: var(--ink-soft);
+      align-self: end;
+      text-align: right;
+      padding-bottom: 0.4rem;
+    }
+
+    .letter__sign small {
+      display: block;
+      font-family: var(--mono);
+      font-style: normal;
+      font-size: 0.65rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--ink);
+      margin-top: 0.4rem;
+    }
+
+    @media (max-width: 900px) {
+      .letter { grid-template-columns: 1fr; gap: 1.5rem; }
+      .letter__index { position: static; }
+      .letter__sign { text-align: left; }
+    }
+
+    /* =========================================================
+       SECTION — INVENTORY (Build, 10–18s) — Spec-sheet asymmetric grid
+       ========================================================= */
+    .inv__head {
+      display: grid;
+      grid-template-columns: 1fr 2fr 1fr;
+      gap: 1.5rem;
+      align-items: end;
+      border-bottom: 1px solid var(--ink);
+      padding-bottom: 1.25rem;
+      margin-bottom: 3rem;
+    }
+
+    .inv__eyebrow {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+    }
+
+    .inv__title {
+      font-family: var(--display);
+      font-style: italic;
+      font-size: clamp(2rem, 4vw, 3.5rem);
+      line-height: 0.95;
+      letter-spacing: -0.025em;
+    }
+
+    .inv__total {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      text-align: right;
+    }
+
+    .inv__total strong {
+      display: block;
+      font-family: var(--display);
+      font-style: italic;
+      font-size: 2rem;
+      font-weight: 500;
+      color: var(--ink);
+      text-transform: none;
+      letter-spacing: -0.01em;
+      margin-bottom: 0.2rem;
+    }
+
+    .inv__grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 1.25rem;
+    }
+
+    .sail {
+      position: relative;
+      overflow: hidden;
+      background: var(--paper);
+      border: 1px solid var(--hair);
+    }
+
+    .sail--a { grid-column: 1 / span 7; aspect-ratio: 4 / 5; }
+    .sail--b { grid-column: 8 / span 5; aspect-ratio: 4 / 6; }
+    .sail--c { grid-column: 1 / span 4; aspect-ratio: 1 / 1; }
+    .sail--d { grid-column: 5 / span 5; aspect-ratio: 16 / 11; }
+    .sail--e { grid-column: 10 / span 3; aspect-ratio: 3 / 4; }
+
+    @media (max-width: 900px) {
+      .sail--a, .sail--b, .sail--c, .sail--d, .sail--e {
+        grid-column: 1 / -1;
+        aspect-ratio: 4 / 5;
+      }
+    }
+
+    .sail__media {
+      position: absolute;
+      inset: 0;
+    }
+
+    .sail__media img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transform: scale(1.12);
+      transition: transform 1.6s var(--e-out-expo);
+      filter: contrast(1.02) saturate(0.86);
+    }
+
+    .sail.in .sail__media img { transform: scale(1); }
+
+    @media (hover: hover) and (pointer: fine) {
+      .sail:hover .sail__media img { transform: scale(1.02); }
+    }
+
+    .sail__caption {
+      position: absolute;
+      inset: auto 0 0 0;
+      padding: 1.25rem 1.5rem;
+      background: linear-gradient(to top, rgba(11, 11, 11, 0.78), transparent 95%);
+      color: var(--paper);
+      z-index: 2;
+    }
+
+    .sail__row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 1rem;
+    }
+
+    .sail__name {
+      font-family: var(--display);
+      font-style: italic;
+      font-size: clamp(1.1rem, 1.6vw, 1.65rem);
+      line-height: 1.05;
+      letter-spacing: -0.01em;
+    }
+
+    .sail__no {
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: rgba(246, 239, 226, 0.7);
+    }
+
+    .sail__spec {
+      margin-top: 0.4rem;
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(246, 239, 226, 0.78);
+    }
+
+    /* =========================================================
+       MARQUEE — italic, slow, deliberate
+       ========================================================= */
+    .ticker {
+      overflow: hidden;
+      white-space: nowrap;
+      padding: 3rem 0;
+      border-top: 1px solid var(--ink);
+      border-bottom: 1px solid var(--ink);
+      background: var(--bg-deep);
+    }
+
+    .ticker__row {
+      display: inline-flex;
+      align-items: baseline;
+      animation: ticker 38s linear infinite;
+      font-family: var(--display);
+      font-style: italic;
+      font-size: clamp(2.75rem, 7vw, 7rem);
+      letter-spacing: -0.03em;
+      color: var(--ink);
+    }
+
+    .ticker__row span { flex-shrink: 0; padding: 0 0.4em; }
+    .ticker__row em { font-style: italic; color: var(--crimson); }
+    .ticker__row .dot {
+      color: var(--brass);
+      font-style: normal;
+      padding: 0 0.6em;
+    }
+
+    @keyframes ticker {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-25%); }
+    }
+
+    /* =========================================================
+       SECTION — PROCESS LEDGER (Build → Climax) Asymmetric specsheet
+       ========================================================= */
+    .ledger {
+      display: grid;
+      grid-template-columns: 5fr 7fr;
+      gap: 5rem;
+      align-items: start;
+    }
+
+    .ledger__art {
+      position: sticky;
+      top: 6rem;
+      aspect-ratio: 3 / 4;
+      overflow: hidden;
+      background: var(--paper);
+      border: 1px solid var(--hair);
+    }
+
+    .ledger__art img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transform: scale(1.1);
+      transition: transform 2s var(--e-out-expo);
+      filter: contrast(1.05) saturate(0.84);
+    }
+
+    .ledger__art.in img { transform: scale(1); }
+
+    .ledger__list { list-style: none; }
+
+    .ledger__row {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 1.5rem;
+      align-items: baseline;
+      padding: 2rem 0;
+      border-bottom: 1px solid var(--hair);
+    }
+
+    .ledger__num {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      min-width: 2.5ch;
+    }
+
+    .ledger__body h3 {
+      font-family: var(--display);
+      font-style: italic;
+      font-weight: 500;
+      font-size: clamp(1.5rem, 2.2vw, 2rem);
+      line-height: 1.15;
+      letter-spacing: -0.015em;
+      margin-bottom: 0.5rem;
+    }
+
+    .ledger__body p {
+      font-size: 0.98rem;
+      color: var(--ink-soft);
+      line-height: 1.55;
+      max-width: 52ch;
+    }
+
+    .ledger__meta {
+      text-align: right;
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      align-self: start;
+      padding-top: 0.25rem;
+    }
+
+    .ledger__meta strong {
+      display: block;
+      font-family: var(--display);
+      font-style: italic;
+      font-weight: 500;
+      font-size: 1.3rem;
+      color: var(--ink);
+      letter-spacing: -0.01em;
+      text-transform: none;
+      margin-bottom: 0.15rem;
+    }
+
+    @media (max-width: 980px) {
+      .ledger { grid-template-columns: 1fr; gap: 2rem; }
+      .ledger__art { position: static; }
+      .ledger__row { grid-template-columns: auto 1fr; }
+      .ledger__meta { grid-column: 1 / -1; text-align: left; padding-top: 0.5rem; }
+    }
+
+    /* =========================================================
+       SECTION — QUOTE (Build → Climax close)
+       ========================================================= */
+    .quote {
+      padding: clamp(7rem, 14vh, 14rem) 0;
+      background: var(--navy);
+      color: var(--paper);
+      position: relative;
+    }
+
+    .quote::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: var(--paper);
+      opacity: 0.18;
+    }
+
+    .quote__body {
+      font-family: var(--display);
+      font-style: italic;
+      font-weight: 400;
+      font-size: clamp(1.7rem, 3.2vw, 3.25rem);
+      line-height: 1.32;
+      letter-spacing: -0.018em;
+      max-width: 28ch;
+    }
+
+    .quote__body em {
+      font-style: italic;
+      color: var(--brass);
+    }
+
+    .quote__body .line { display: block; overflow: hidden; }
+    .quote__body .line span { display: inline-block; transform: translateY(110%); }
+
+    .quote__inner {
+      display: grid;
+      grid-template-columns: 2fr 5fr 3fr;
+      gap: 2rem;
+      align-items: start;
+    }
+
+    .quote__index {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: rgba(246, 239, 226, 0.55);
+    }
+
+    .quote__attr {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(246, 239, 226, 0.75);
+      align-self: end;
+      padding-bottom: 0.5rem;
+    }
+
+    .quote__attr strong {
+      display: block;
+      font-family: var(--display);
+      font-style: italic;
+      font-weight: 500;
+      font-size: 1.4rem;
+      color: var(--paper);
+      letter-spacing: -0.01em;
+      margin-bottom: 0.3rem;
+      text-transform: none;
+    }
+
+    @media (max-width: 900px) {
+      .quote__inner { grid-template-columns: 1fr; }
+    }
+
+    /* =========================================================
+       ACT 3 — COMMISSION (Climax, 20–25s)
+       Bold biggest gesture
+       ========================================================= */
+    .commission {
+      padding: clamp(8rem, 16vh, 16rem) 0 clamp(6rem, 12vh, 12rem);
+      text-align: left;
+    }
+
+    .commission__inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: end;
+    }
+
+    .commission__title {
+      font-family: var(--display);
+      font-size: clamp(3.5rem, 11vw, 12rem);
+      font-style: italic;
+      line-height: 0.86;
+      letter-spacing: -0.04em;
+      max-width: 12ch;
+    }
+
+    .commission__title em {
+      color: var(--crimson);
+      font-style: italic;
+    }
+
+    .commission__title .line { display: block; overflow: hidden; }
+    .commission__title .line span { display: inline-block; transform: translateY(110%); }
+
+    .commission__aside {
+      max-width: 38ch;
+      padding-bottom: 2rem;
+    }
+
+    .commission__aside p {
+      font-size: 1rem;
+      color: var(--ink-soft);
+      line-height: 1.55;
+      margin-bottom: 1.75rem;
+    }
+
+    .btn-magnetic {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1.25em 2.4em;
+      border: 1px solid var(--ink);
+      border-radius: 100px;
+      background: transparent;
+      color: var(--ink);
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 400ms var(--e-out),
+                  color 400ms var(--e-out),
+                  transform 160ms var(--e-out);
+      overflow: hidden;
+    }
+
+    .btn-magnetic .arrow {
+      display: inline-block;
+      transition: transform 400ms var(--e-out);
+    }
+
+    .btn-magnetic:active { transform: scale(0.97); }
+
+    @media (hover: hover) and (pointer: fine) {
+      .btn-magnetic:hover {
+        background: var(--ink);
+        color: var(--paper);
+      }
+      .btn-magnetic:hover .arrow { transform: translateX(6px); }
+    }
+
+    @media (max-width: 820px) {
+      .commission__inner { grid-template-columns: 1fr; align-items: start; gap: 2rem; }
+    }
+
+    /* =========================================================
+       EPILOGUE — COLOPHON FOOTER (25–27s)
+       ========================================================= */
+    .colo {
+      padding: 4rem 0 2.5rem;
+      border-top: 1px solid var(--ink);
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    .colo__grid {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr 1fr 1fr;
+      gap: 3rem;
+      margin-bottom: 4rem;
+    }
+
+    .colo__brand {
+      font-family: var(--display);
+      font-style: italic;
+      font-weight: 500;
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      letter-spacing: -0.02em;
+      line-height: 0.95;
+      text-transform: none;
+    }
+
+    .colo__brand small {
+      display: block;
+      font-family: var(--mono);
+      font-style: normal;
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      margin-top: 0.75rem;
+      color: var(--ink-soft);
+      font-weight: 400;
+    }
+
+    .colo h4 {
+      font-size: 0.7rem;
+      color: var(--ink-soft);
+      margin-bottom: 1rem;
+      font-weight: 500;
+    }
+
+    .colo ul { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; }
+    .colo a { color: var(--ink); text-decoration: none; text-transform: none; letter-spacing: 0; font-family: var(--body); font-size: 0.95rem; }
+
+    @media (hover: hover) and (pointer: fine) {
+      .colo a:hover { color: var(--crimson); }
+    }
+
+    .colo__base {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 2rem;
+      border-top: 1px solid var(--hair);
+      color: var(--ink-soft);
+    }
+
+    @media (max-width: 820px) {
+      .colo__grid { grid-template-columns: 1fr 1fr; gap: 2rem; }
+      .colo__brand { grid-column: 1 / -1; }
+      .colo__base { flex-direction: column; gap: 1rem; text-align: center; }
+    }
+
+    /* =========================================================
+       REVEAL system
+       ========================================================= */
+    [data-reveal] {
+      opacity: 0;
+      transform: translateY(36px);
+      transition: opacity var(--t-reveal) var(--e-out-expo),
+                  transform var(--t-reveal) var(--e-out-expo);
+    }
+    [data-reveal].in {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Mobile motion adaptation */
+    @media (max-width: 767px) {
+      [data-reveal] { transform: translateY(18px); }
+      .ticker__row { animation-duration: 24s; }
+    }
+
+    /* Reduced-motion — fewer + gentler */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.2s !important;
+        transition-duration: 0.2s !important;
+        scroll-behavior: auto !important;
+      }
+      [data-reveal] { transform: none !important; }
+      .masthead__title .char,
+      .letter__body .w,
+      .commission__title .line span,
+      .quote__body .line span { transform: none !important; }
+      .sail__media img,
+      .ledger__art img { transform: scale(1) !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="progress"></div>
+
+  <header class="top">
+    <div class="container top__inner">
+      <span class="top__meta">Vol. III · No. 047 · Newport, R.I.</span>
+      <a href="#" class="top__brand">Maris &amp; Co.</a>
+      <ul class="top__links">
+        <li><a href="#inventory">Inventory</a></li>
+        <li><a href="#process">Process</a></li>
+        <li><a href="#commission">Commission</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <!-- ============================================================
+       ACT 1 — MASTHEAD HERO
+       ============================================================ -->
+  <section class="masthead">
+    <div class="container" style="display:contents;">
+      <div class="masthead__rule"></div>
+
+      <div class="masthead__no">
+        47
+        <small>Volumes laid · since '47</small>
+      </div>
+
+      <h1 class="masthead__title">
+        <span class="line">Cloth, by</span>
+        <span class="line">hand &amp;</span>
+        <span class="line"><em>wind.</em></span>
+      </h1>
+
+      <p class="masthead__deck">
+        Three generations of sailmakers on the same Beech floor on Thames Street. We cut for the wooden classics of Narragansett Bay and the people who refuse to give up on them.
+      </p>
+
+      <dl class="masthead__data">
+        <div><dt>Founded</dt><dd>April 1947</dd></div>
+        <div><dt>Loft</dt><dd>Newport, R.I.</dd></div>
+        <div><dt>Sails laid</dt><dd>14,827</dd></div>
+        <div><dt>People</dt><dd>11</dd></div>
+      </dl>
+
+      <p class="masthead__cite">
+        "If a sail comes back, we re-cut it for free. The first one is what we charge for; the second one is what we owe."
+        <span>— House rule · est. 1949</span>
+      </p>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       SECTION — LETTER
+       ============================================================ -->
+  <section>
+    <div class="container letter">
+      <div class="letter__index">
+        <strong>i.</strong>
+        From the loft floor
+      </div>
+      <p class="letter__body" data-words>
+        We have never advertised. The boats that need us tend to find us, usually through a friend on a dock somewhere, and so we have stayed <em>small on purpose</em> — eleven of us, three benches, one cutting floor that is the same wood my grandfather laid in 1947.
+      </p>
+      <p class="letter__sign">
+        Eleanor Maris
+        <small>Third generation · Loft principal</small>
+      </p>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       SECTION — INVENTORY (asymmetric bento, not 3-equal)
+       ============================================================ -->
+  <section id="inventory">
+    <div class="container">
+      <header class="inv__head">
+        <span class="inv__eyebrow">ii. Inventory · Spring 2026</span>
+        <h2 class="inv__title">Cloth on the floor today.</h2>
+        <p class="inv__total">
+          <strong>27</strong>
+          Sails currently being laid
+        </p>
+      </header>
+
+      <div class="inv__grid">
+        <article class="sail sail--a" data-reveal>
+          <div class="sail__media">
+            <img src="https://picsum.photos/seed/maris-mainsail-cotton/1200/1500" alt="A new mainsail laid out on the cutting floor, morning light through the loft windows.">
+          </div>
+          <div class="sail__caption">
+            <div class="sail__row">
+              <h3 class="sail__name">Mainsail · Concordia 33</h3>
+              <span class="sail__no">No. 04827</span>
+            </div>
+            <p class="sail__spec">Egyptian cotton · 9.4 oz · 412 sq ft · for hull <em>Salacia</em></p>
+          </div>
+        </article>
+
+        <article class="sail sail--b" data-reveal>
+          <div class="sail__media">
+            <img src="https://picsum.photos/seed/maris-jib-flax/900/1300" alt="A working jib in flax, half-stitched, draped over a wooden bench.">
+          </div>
+          <div class="sail__caption">
+            <div class="sail__row">
+              <h3 class="sail__name">Working jib · Buzzards Bay 25</h3>
+              <span class="sail__no">No. 04828</span>
+            </div>
+            <p class="sail__spec">Belgian flax · 7.1 oz · 188 sq ft</p>
+          </div>
+        </article>
+
+        <article class="sail sail--c" data-reveal>
+          <div class="sail__media">
+            <img src="https://picsum.photos/seed/maris-rope-detail/800/800" alt="A close-up of hand-stitched corner reinforcement on linen sailcloth.">
+          </div>
+          <div class="sail__caption">
+            <div class="sail__row">
+              <h3 class="sail__name">Storm trysail · 12-metre</h3>
+              <span class="sail__no">No. 04829</span>
+            </div>
+            <p class="sail__spec">Heavy Dacron · 11.2 oz · 84 sq ft</p>
+          </div>
+        </article>
+
+        <article class="sail sail--d" data-reveal>
+          <div class="sail__media">
+            <img src="https://picsum.photos/seed/maris-cutting-floor/1400/950" alt="A panoramic view of the cutting floor with chalk lines drawn for a mainsail.">
+          </div>
+          <div class="sail__caption">
+            <div class="sail__row">
+              <h3 class="sail__name">Drifter · Herreshoff Marlin</h3>
+              <span class="sail__no">No. 04830</span>
+            </div>
+            <p class="sail__spec">Light Dacron · 4.8 oz · 224 sq ft · for hull <em>Halcyon</em></p>
+          </div>
+        </article>
+
+        <article class="sail sail--e" data-reveal>
+          <div class="sail__media">
+            <img src="https://picsum.photos/seed/maris-bronze-grommets/700/950" alt="A row of solid bronze grommets being set into a sail edge by hand.">
+          </div>
+          <div class="sail__caption">
+            <div class="sail__row">
+              <h3 class="sail__name">Spinnaker (re-cut)</h3>
+              <span class="sail__no">No. 04831</span>
+            </div>
+            <p class="sail__spec">1976 original · returned for spring</p>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       TICKER
+       ============================================================ -->
+  <section class="ticker" aria-hidden="true">
+    <div class="ticker__row">
+      <span>Egyptian cotton</span><span class="dot">·</span>
+      <span><em>Belgian flax</em></span><span class="dot">·</span>
+      <span>Heavy Dacron</span><span class="dot">·</span>
+      <span><em>solid bronze</em></span><span class="dot">·</span>
+      <span>hand-laid seams</span><span class="dot">·</span>
+      <span><em>tannic linen</em></span><span class="dot">·</span>
+      <span>Egyptian cotton</span><span class="dot">·</span>
+      <span><em>Belgian flax</em></span><span class="dot">·</span>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       SECTION — PROCESS LEDGER
+       ============================================================ -->
+  <section id="process">
+    <div class="container ledger">
+      <figure class="ledger__art" data-reveal>
+        <img src="https://picsum.photos/seed/maris-loft-window/900/1200" alt="Morning light through the high loft windows on a half-laid sail.">
+      </figure>
+
+      <ol class="ledger__list">
+        <li class="ledger__row" data-reveal>
+          <span class="ledger__num">01</span>
+          <div class="ledger__body">
+            <h3>The cloth comes in by hand.</h3>
+            <p>We buy our cotton from a mill in Tewkesbury that has been weaving for our family since 1962. The flax travels by container ship from Kortrijk. We accept nothing pre-treated.</p>
+          </div>
+          <div class="ledger__meta">
+            <strong>3-week</strong>
+            average lead time
+          </div>
+        </li>
+        <li class="ledger__row" data-reveal>
+          <span class="ledger__num">02</span>
+          <div class="ledger__body">
+            <h3>It is drawn full-size on the loft floor.</h3>
+            <p>Every sail begins in chalk on Beech planks. We measure the boat in the water, not on paper. A mainsail for a 33-foot hull takes two days to lay before we touch the cloth.</p>
+          </div>
+          <div class="ledger__meta">
+            <strong>2 days</strong>
+            of layout
+          </div>
+        </li>
+        <li class="ledger__row" data-reveal>
+          <span class="ledger__num">03</span>
+          <div class="ledger__body">
+            <h3>It is cut, broad-seamed, and stitched.</h3>
+            <p>One person on each sail, start to finish. Heavy corners are hand-stitched in waxed Dacron thread. Bronze grommets are set with the same press my grandfather paid forty dollars for at a Providence auction.</p>
+          </div>
+          <div class="ledger__meta">
+            <strong>11–14</strong>
+            days on the bench
+          </div>
+        </li>
+        <li class="ledger__row" data-reveal>
+          <span class="ledger__num">04</span>
+          <div class="ledger__body">
+            <h3>It goes back out, and we follow it.</h3>
+            <p>Every new sail is sea-trialled with the owner. We sail with you the first afternoon. Anything we can fix that week, we will. We have not missed a delivery sail since 2003.</p>
+          </div>
+          <div class="ledger__meta">
+            <strong>1 afternoon</strong>
+            of sea trial
+          </div>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       SECTION — QUOTE (deep navy)
+       ============================================================ -->
+  <section class="quote">
+    <div class="container quote__inner">
+      <span class="quote__index">iv.</span>
+      <blockquote class="quote__body" data-lines>
+        <span class="line"><span>The hardest part is</span></span>
+        <span class="line"><span>convincing people to wait</span></span>
+        <span class="line"><span>for something <em>made well.</em></span></span>
+        <span class="line"><span>Then they sail in it once,</span></span>
+        <span class="line"><span>and the argument is over.</span></span>
+      </blockquote>
+      <p class="quote__attr">
+        <strong>Henry Maris</strong>
+        Founder · 1947 – 1998
+      </p>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       ACT 3 — COMMISSION (CTA)
+       ============================================================ -->
+  <section id="commission" class="commission">
+    <div class="container commission__inner">
+      <h2 class="commission__title">
+        <span class="line"><span>Bring us</span></span>
+        <span class="line"><span>your <em>boat.</em></span></span>
+      </h2>
+      <div class="commission__aside">
+        <p>
+          Send a photograph, the rig dimensions if you have them, and the year she was launched. We will write back within two weeks. The waitlist is currently four months and we will tell you the truth about it.
+        </p>
+        <button class="btn-magnetic" type="button" data-magnetic>
+          <span>Begin a commission</span>
+          <span class="arrow">→</span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       EPILOGUE — COLOPHON
+       ============================================================ -->
+  <footer class="colo">
+    <div class="container">
+      <div class="colo__grid">
+        <div class="colo__brand">
+          Maris &amp; Co.
+          <small>Sailmakers · Newport · Est. 1947</small>
+        </div>
+        <div>
+          <h4>Loft</h4>
+          <ul>
+            <li><a href="#">418 Thames Street</a></li>
+            <li><a href="#">Newport, R.I. 02840</a></li>
+            <li><a href="#">Mon – Sat · by appointment</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Talk</h4>
+          <ul>
+            <li><a href="mailto:loft@marisandco.com">loft@marisandco.com</a></li>
+            <li><a href="tel:+14018472831">+1 (401) 847 2831</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Quietly</h4>
+          <ul>
+            <li><a href="#">The Loft Notes (post)</a></li>
+            <li><a href="#">A Stitch Once a Year (annual)</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="colo__base">
+        <span>© 2026 Maris &amp; Company, R.I.</span>
+        <span>Set in Fraunces &amp; Geist · designed for slow reading.</span>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    /* =========================================================
+       LENIS smooth scroll
+       ========================================================= */
+    const lenis = new Lenis({
+      duration: 1.2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      smooth: true,
+    });
+    lenis.on('scroll', ScrollTrigger.update);
+    gsap.ticker.add((time) => lenis.raf(time * 1000));
+    gsap.ticker.lagSmoothing(0);
+
+    /* =========================================================
+       SPLIT — chars
+       ========================================================= */
+    function splitChars(el) {
+      el.querySelectorAll('.line').forEach(line => {
+        const html = line.innerHTML;
+        line.innerHTML = '';
+        const temp = document.createElement('span');
+        temp.innerHTML = html;
+        const walk = (node, target) => {
+          [...node.childNodes].forEach(n => {
+            if (n.nodeType === 3) {
+              [...n.textContent].forEach(ch => {
+                const s = document.createElement('span');
+                s.classList.add('char');
+                s.textContent = ch === ' ' ? ' ' : ch;
+                target.appendChild(s);
+              });
+            } else {
+              const wrap = document.createElement(n.tagName.toLowerCase());
+              [...n.attributes].forEach(a => wrap.setAttribute(a.name, a.value));
+              target.appendChild(wrap);
+              walk(n, wrap);
+            }
+          });
+        };
+        walk(temp, line);
+      });
+    }
+
+    function splitWords(el) {
+      const html = el.innerHTML;
+      const temp = document.createElement('div');
+      temp.innerHTML = html;
+      el.innerHTML = '';
+      const walk = (node) => {
+        [...node.childNodes].forEach(n => {
+          if (n.nodeType === 3) {
+            const parts = n.textContent.split(/(\s+)/);
+            parts.forEach(part => {
+              if (!part) return;
+              if (/^\s+$/.test(part)) {
+                el.appendChild(document.createTextNode(part));
+              } else {
+                const wrap = document.createElement('span');
+                wrap.classList.add('ww');
+                const inner = document.createElement('span');
+                inner.classList.add('w');
+                inner.textContent = part;
+                wrap.appendChild(inner);
+                el.appendChild(wrap);
+              }
+            });
+          } else {
+            const wrap = document.createElement('span');
+            wrap.classList.add('ww');
+            const inner = document.createElement(n.tagName.toLowerCase());
+            [...n.attributes].forEach(a => inner.setAttribute(a.name, a.value));
+            inner.classList.add('w');
+            inner.textContent = n.textContent;
+            wrap.appendChild(inner);
+            el.appendChild(wrap);
+          }
+        });
+      };
+      walk(temp);
+    }
+
+    /* =========================================================
+       HERO entrance
+       ========================================================= */
+    const heroTitle = document.querySelector('.masthead__title');
+    splitChars(heroTitle);
+
+    const deck = document.querySelector('.masthead__deck');
+    const data = document.querySelector('.masthead__data');
+    const cite = document.querySelector('.masthead__cite');
+
+    const heroTl = gsap.timeline({ delay: 0.25 });
+    heroTl
+      .to(heroTitle.querySelectorAll('.char'), {
+        y: 0,
+        duration: 1.1,
+        stagger: 0.022,
+        ease: 'power4.out',
+      })
+      .to([deck, data, cite], {
+        opacity: 1,
+        y: 0,
+        duration: 0.85,
+        stagger: 0.08,
+        ease: 'power3.out',
+      }, '-=0.6');
+
+    /* =========================================================
+       LETTER words
+       ========================================================= */
+    const letterBody = document.querySelector('[data-words]');
+    splitWords(letterBody);
+    gsap.to(letterBody.querySelectorAll('.w'), {
+      y: 0,
+      duration: 0.85,
+      stagger: 0.035,
+      ease: 'power3.out',
+      scrollTrigger: { trigger: letterBody, start: 'top 78%' },
+    });
+
+    /* =========================================================
+       QUOTE lines
+       ========================================================= */
+    gsap.to('.quote__body .line span', {
+      y: 0,
+      duration: 1.05,
+      stagger: 0.08,
+      ease: 'power3.out',
+      scrollTrigger: { trigger: '.quote', start: 'top 65%' },
+    });
+
+    /* =========================================================
+       COMMISSION title
+       ========================================================= */
+    gsap.to('.commission__title .line span', {
+      y: 0,
+      duration: 1.1,
+      stagger: 0.09,
+      ease: 'power3.out',
+      scrollTrigger: { trigger: '.commission', start: 'top 70%' },
+    });
+
+    /* =========================================================
+       REVEAL (cards, ledger rows)
+       ========================================================= */
+    gsap.utils.toArray('[data-reveal]').forEach(el => {
+      ScrollTrigger.create({
+        trigger: el,
+        start: 'top 86%',
+        onEnter: () => el.classList.add('in'),
+      });
+    });
+
+    /* =========================================================
+       SCROLL PROGRESS
+       ========================================================= */
+    gsap.to('.progress', {
+      scaleX: 1,
+      ease: 'none',
+      scrollTrigger: {
+        trigger: document.body,
+        start: 'top top',
+        end: 'bottom bottom',
+        scrub: 0.3,
+      },
+    });
+
+    /* =========================================================
+       TICKER scroll-velocity
+       ========================================================= */
+    const tickerRow = document.querySelector('.ticker__row');
+    if (tickerRow) {
+      lenis.on('scroll', ({ velocity }) => {
+        const speed = 1 + Math.min(Math.abs(velocity) * 0.04, 2);
+        tickerRow.style.animationDuration = `${38 / speed}s`;
+      });
+    }
+
+    /* =========================================================
+       MAGNETIC button (desktop fine pointer only)
+       ========================================================= */
+    if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+      document.querySelectorAll('[data-magnetic]').forEach(btn => {
+        btn.addEventListener('mousemove', (e) => {
+          const r = btn.getBoundingClientRect();
+          const x = e.clientX - r.left - r.width / 2;
+          const y = e.clientY - r.top - r.height / 2;
+          gsap.to(btn, { x: x * 0.28, y: y * 0.28, duration: 0.4, ease: 'power2.out' });
+        });
+        btn.addEventListener('mouseleave', () => {
+          gsap.to(btn, { x: 0, y: 0, duration: 0.7, ease: 'elastic.out(1, 0.3)' });
+        });
+      });
+    }
+  </script>
+</body>
+</html>
